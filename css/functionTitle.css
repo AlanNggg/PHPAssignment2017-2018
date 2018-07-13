@@ -1,0 +1,57 @@
+/* This css is going to define the function name effect and image effect. */
+.fTitle1 {
+    position: fixed;
+    top: 52%;
+    left:28.5%;
+     color: white;
+     font-size: 20px;
+}
+
+.fTitle2 {
+    position: fixed;
+    top: 52%;
+    left:46.5%;
+     color: white;
+     font-size: 20px;
+}
+
+.fTitle3 {
+    position: fixed;
+    top: 52%;
+    left:66.8%;
+     color: white;
+     font-size: 20px;
+}
+
+.btImage1 {
+    position: absolute;
+    top: 47%;
+    left: 27.7%;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    width: 70px;
+    height: 70px;
+
+}
+
+.btImage2 {
+    position: absolute;
+    top: 47%;
+    left: 47.5%;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    width: 70px;
+    height: 70px;
+
+}
+
+.btImage3 {
+    position: absolute;
+    top: 47%;
+    left: 67.5%;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    width: 70px;
+    height: 70px;
+
+}

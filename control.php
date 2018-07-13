@@ -101,7 +101,7 @@
 
             <?php
                     $id = "restaurant";
-                    // check user from which department and get the suitable function
+                    // check user from which department and get the suitable function,make website consistency.
                     if($id == "restaurant")
                         require("restaurant.php");
                     else{
