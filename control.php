@@ -20,7 +20,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit-icons.min.js"></script>
 
     <link rel="stylesheet" href="css/font.css">
-    <link rel="stylesheet" href="css/circle.css">
+    
     <link rel="stylesheet" href="css/typing.css">
     <style>
             .background-image{
@@ -99,15 +99,15 @@
                 <h1>Nice to meet You!</h1>
             </div>
 
-            <!-- control button set -->
-            <span class="circle1">
-                <?php
-                        echo "<h1>HI!</h1>";
-                ?>
-            </span>
-            <span class="circle2"></span>
-            <span class="circle3"></span>
-      s
+            <?php
+                    $id = "restaurant";
+                    // check user from which department and get the suitable function
+                    if($id == "restaurant")
+                        require("restaurant.php");
+                    else{
+                        require("manager.php");
+                    }
+            ?>
     
 </body>
 </html>
