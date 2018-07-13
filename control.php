@@ -19,9 +19,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit-icons.min.js"></script>
 
+
     <link rel="stylesheet" href="css/font.css">
     
     <link rel="stylesheet" href="css/typing.css">
+
+    
     <style>
             .background-image{
                 position: fixed;
@@ -50,7 +53,7 @@
         <!-- nabBar -->
         <div class="pos-f-t">
                  <nav class="navbar navbar-white bg-dark">
-                 <button class="uk-button uk-button-default uk-margin-small-right bg-white" type="button" uk-toggle="target: #offcanvas-nav-primary" uk-icon="icon: table">Menu</button>
+                 <button class="uk-button uk-button-default uk-margin-small-right bg-white" type="button" uk-toggle="target: #offcanvas-nav-primary" ><span class="uk-margin-small-right" uk-icon="icon: table"></span>Menu</button>
                 
                         <div id="offcanvas-nav-primary" uk-offcanvas="overlay: true">
                         <div class="uk-offcanvas-bar uk-flex uk-flex-column">
@@ -63,7 +66,7 @@
                                       <a href="#" > <span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span>Setting</a>
                                       
                                      <ul class="uk-nav-sub">
-                                         <li><a href="#">Sub</a></li>
+                                         <li> <input class="uk-checkbox" type="checkbox" id="cbEffect" name="cbEffect" value="isEffect" checked/>Effect</li>
                                          <li><a href="#">Sub</a></li>
                                       </ul>
                                 </li>
