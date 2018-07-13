@@ -1,0 +1,115 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html,body { height: 100%; margin: 0px; padding: 0px; }
+
+header {
+    height: 100%;
+    float: left;
+    background-color: rgb(242, 77, 115);
+    width: 50%;
+}
+
+.OrderSystem {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: sans-serif;
+    color: white;
+    text-align: right;
+    margin-right: 30px;
+}
+
+.OrderSystem h5{
+    font-size: 30px;
+    text-decoration: underline;
+}
+
+.OrderSystem h1 {
+    font-size: 70px; 
+}
+
+.OrderSystem .order{
+    margin-right: 100px;
+}
+
+aside {
+    float: left;
+    text-align: center;
+    width: 50%;
+    height: 50%;
+}
+
+aside .role {
+    position: relative;
+    top: 20%;
+}
+
+.role #left_button {
+    float: left;
+    width: 256px; 
+    height: 256px; 
+    background-image: url('../UI/material/updater.png');
+    transform: rotate(270deg);
+}
+
+.role #left_button:hover {
+    background-image: url("../UI/material/updater_hover.png"); 
+    transform: rotate(270deg);
+}
+
+.role #right_button {
+    float: right;
+    width: 256px;
+    height: 256px; 
+    background-image: url("../UI/material/updater.png"); 
+    transform: rotate(90deg);
+}
+
+.role #right_button:hover {
+    background-image: url("../UI/material/updater_hover.png"); 
+    transform: rotate(90deg);
+}
+
+/*login form : */
+.login_area {
+    float: left;
+    text-align: center; /*align the id, password & button to the center*/
+    width: 50%;
+    height: 50%;
+    
+}
+
+.login_area form {
+    font-family: sans-serif;
+    font-size: 30px;
+    position: relative;
+    top: 20%;
+}
+
+.login_area label {
+    padding-right: 30px;
+}
+
+#username, #password {
+    border: 0px none white;
+    border-bottom: 1px solid gray;
+    padding-right: 50px;
+    margin-right: 50px;
+    height: 40px;
+}
+
+#password {
+    margin-right: 150px;
+}
+
+#login {
+    margin-left: 20px;
+    margin-top: 30px;
+    font-size: 30px;
+    padding: 15px 50px;
+    border: 1px solid grey;
+    background-color: white;
+}

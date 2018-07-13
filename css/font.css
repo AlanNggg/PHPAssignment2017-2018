@@ -1,0 +1,18 @@
+#title{
+    position:absolute;
+    top:3pt;
+    left: 87%;
+    right: 0px;
+    z-index: 1;
+    color: white;
+    font-size: 17pt;
+}
+#subtitle{
+    position:absolute;
+    top:24pt;
+    left: 88.5%;
+    right: 0px;
+    z-index: 1;
+    color: white;
+    font-size: 10pt;
+}

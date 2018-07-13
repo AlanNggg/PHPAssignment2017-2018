@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IVE Restaurant</title>
+    <link rel="stylesheet" href="css/Login.css"/>
+    <script src="js/jquery-3.3.1.js">
+        $(document).ready(function() {
+            $("#left_button").click(function() {
+                
+            });
+            $("input").focus(function() {
+                $(this).css("background-color", "#CCCCCC");
+            });
+        });
+    </script>
+</head>
+<body>
+    <header id="title">
+        <div class="OrderSystem">
+            <h1 class="order">Order</h1>
+            <h1>System</h1>
+            <h5>(v1.0.0)</h5>                
+        </div>
+    </header>
+    <aside>
+        <div class="role">
+            <div id="left_button"></div>
+            <img src="" alt="Restaurant"/>
+            <img src="" alt="Manager" style="display:none"/>
+            <img src="" alt="Suppliers" style="display:none"/>
+            <img src="" alt="Warehouse Staff" style="display:none"/>
+            <div id="right_button"></div>
+        </div>       
+    </aside>
+    <secion>
+        <div class="login_area">
+            <form>
+                <label for="username">ID:</label>
+                <input type="text" Name="username" id ="username" placeholder="Username"/>
+                <br><br>
+                <label for="password">Password:</label>
+                <input type="password" Name="password" id ="password" placeholder="Password"/>
+                <br><br>
+                <input type="submit" id="login" value="Login"/>
+            </form>
+        </div>
+        
+    </secion>
+    <footer></footer>
+</body>
+</html>
