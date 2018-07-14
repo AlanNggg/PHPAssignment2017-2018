@@ -80,16 +80,34 @@
 
                         <!-- Create Order Table -->
                         <div id="modal-createOrder" class="uk-modal-full" uk-modal>
+                            <!-- use dialog way -->
                             <div class="uk-modal-dialog">
-                                <button class="uk-modal-close-default" type="button" uk-close></button>
-                                <div class="uk-modal-header">
-                                    <h2 class="uk-modal-title">Create Order</h2>
-                                </div>
-                                <div class="uk-padding">
-                                <form class="uk-form-stacked">
 
+                                <!-- Close button to close the modal -->
+                                <button class="uk-modal-close-default" type="button" uk-close></button>
+
+                                <!-- set grid and width about the modal uk-child-width-1-2 is mean it moke to class in half  -->
+                                <div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid> 
+
+                                <!-- The header text of modal -->
+                                    <div class="uk-modal-header">
+                                        <h2 class="uk-modal-title">Create Order</h2>
+                                    
+                                    <!-- Set the padding with all under element uk-padding is defualt padding in UIkit  -->
+                                     <div class="uk-padding">
+
+                                         <!-- Form -->
+                                     <form class="uk-form-stacked">
+                                        <!-- Restaurant ID info -->
                                         <div class="uk-margin">
-                                            <label class="uk-form-label" for="form-stacked-text">Text</label>
+                                            <label class="uk-form-label" for="form-stacked-text">Restaurant Id</label>
+                                            <div class="uk-form-controls">
+                                                <input class="uk-input" id="form-stacked-text" type="text" placeholder="Some text...">
+                                            </div>
+                                        </div>
+                                        <!-- Supplier Stock ID -->
+                                        <div class="uk-margin">
+                                            <label class="uk-form-label" for="form-stacked-text">SupplierStock Id</label>
                                             <div class="uk-form-controls">
                                                 <input class="uk-input" id="form-stacked-text" type="text" placeholder="Some text...">
                                             </div>
@@ -113,14 +131,19 @@
                                             </div>
                                         </div>
 
-                                </form>
+                                     </form>
                                  </div>
-                                <div class="uk-modal-footer uk-text-right">
-                                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-                                    <button class="uk-button uk-button-primary" type="button">Save</button>
+                                 
+                                    <!-- The button set of the modal page -->
+                                     <div class="uk-modal-footer uk-text-right">
+                                        <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                                        <button class="uk-button uk-button-primary" type="button">Save</button>
+                                    </div>
                                 </div>
                             </div>
+                            </div>
                         </div>
+                        
 
 </body>
 </html>
