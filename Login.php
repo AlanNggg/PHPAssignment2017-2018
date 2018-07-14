@@ -24,7 +24,9 @@ EOF;
 
             while ($row = mysqli_fetch_assoc($result)) {
                 if ($row["ManagerId"] == $username && $row["Password"] == $password) {
-                    echo $row["Name"];
+                    echo "<tr><th>".$row["ManagerId"]."</th>";
+                    echo "<th>".$row["Name"]."</th>";
+                    echo "<th>".$row["Password"]."</th></tr>";
                 }
             }
             break;
@@ -33,5 +35,5 @@ EOF;
         
         
     }
-
+   
 ?>
