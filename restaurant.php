@@ -20,18 +20,20 @@
 </head>
 <body>
             <!-- set of function button -->
-            <button class="circle1" href="#modal-container"uk-toggle></button>
-            <button class="circle2" href="#modal-WareHouse"uk-toggle></button>
-            <button class="circle3" href="#modal-Description"uk-toggle></button>
+            <button class="circle1" href="#modal-container"uk-toggle>
+                <img class="btImage4" src="UI/material/content_paste_white_108x108.png"/><h1 class="fTitle1">Order</h1></button>
+
+            <button class="circle2" href="#modal-container"uk-toggle>
+                <img class="btImage4" src="UI/material/home_white_108x108.png"/><h1 class="fTitle1">WareHouse</h1></button>  
+
+            <button class="circle3" href="#modal-container"uk-toggle>
+                <img class="btImage4" src="UI/material/store_white_108x108.png"/><h1 class="fTitle1">Restaurant</h1></button>  
+    
             <!-- function name -->
-            <h1 class="fTitle1">Order</h1>
-            <h1 class="fTitle2">WareHouse</h1>
-            <h1 class="fTitle3">Restaurant</h1>
+
 
             <!-- function image -->
-            <img class="btImage1" src="UI/material/content_paste_white_108x108.png"/ >
-            <img class="btImage2" type="image" src="UI/material/home_white_108x108.png" />
-            <img class="btImage3" type="image" src="UI/material/store_white_108x108.png" />
+
             
 
             <!-- Order function when user click the order button  -->
