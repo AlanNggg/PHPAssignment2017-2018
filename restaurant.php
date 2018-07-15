@@ -19,6 +19,10 @@
     
 </head>
 <body>
+    <?php
+            require_once("Connection.php");
+            extract($_REQUEST);
+    ?>
             <!-- set of function button -->
             <button class="circle1" href="#modal-container"uk-toggle>
                 <img class="btImage4" src="UI/material/content_paste_white_108x108.png"/><h1 class="fTitle1">Order</h1></button>
@@ -197,7 +201,15 @@
 
                         <div class="uk-margin">
                              Restaurant Name:
-                            <input class="uk-input" type="text" placeholder="Input">
+                             <?php
+                                $id = 1;
+                                $sql = "SELECT * FROM Restarurant WHERE id = `$id`";
+                                $result = mysqli_query($conn, $sql);
+                                    or die(mysqli_error($conn));
+                                $re = mysqli_fetch_assoc($rs);
+                                echo "<input class="uk-input" type="text" placeholder="Input"value="IQW">";
+                             ?>
+                            
                         </div>
 
                         
