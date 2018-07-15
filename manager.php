@@ -17,24 +17,33 @@
     <link rel="stylesheet" href="css/circle.css">
     <link rel="stylesheet" href="css/functionTitle.css">
     
+    <script arc="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
         function showAll() {
             document.getElementById("tableTitle").innerHTML = "All Order";
-            document.getElementById("allTable").style.display = "";
-            document.getElementById("approvedTable").style.display = "none";
-            document.getElementById("unapprovedTable").style.display = "none";
+            document.getElementById("updateAll").style.display = "";
+            document.getElementById("updateApproved").style.display = "none";
+            document.getElementById("updateUnapproved").style.display = "none";
         }
         function showApproved() {
             document.getElementById("tableTitle").innerHTML = "Approved Order";
-            document.getElementById("allTable").style.display = "none";
-            document.getElementById("approvedTable").style.display = "";
-            document.getElementById("unapprovedTable").style.display = "none";
+            document.getElementById("updateAll").style.display = "none";
+            document.getElementById("updateApproved").style.display = "";
+            document.getElementById("updateUnapproved").style.display = "none";
         }
         function showUnapproved() {
             document.getElementById("tableTitle").innerHTML = "Unapproved Order";
-            document.getElementById("allTable").style.display = "none";
-            document.getElementById("approvedTable").style.display = "none";
-            document.getElementById("unapprovedTable").style.display = "";
+            document.getElementById("updateAll").style.display = "none";
+            document.getElementById("updateApproved").style.display = "none";
+            document.getElementById("updateUnapproved").style.display = "";
+        }
+        
+        function updateBox(DOM, OrderId) {
+            if (DOM.value == 0) {
+                DOM.value = 1;                
+            } else {
+                DOM.value = 0;
+            }
         }
     </script>
 </head>
@@ -72,7 +81,15 @@
 
                     <br><br>
                     <span id="tableTitle" class="uk-label" style="font-size: 20px; background-color: black">All Order</span>
-                    <!-- Show the  order table -->
+
+
+<!-- Show the All order table -->
+                    <form id="updateAll" method="POST" action="control.php">
+                    <input type="hidden" name="role" value="<?php echo $job?>">
+                    <button name="ConfirmAll" class="uk-button uk-button-primary" type="submit" 
+                    style="float: right;">Confirm Edit
+                    </button>
+                    <br><br>
                     <table id="allTable" class="uk-table uk-table-hover uk-table-divider">
                         <thead>
                             <tr>
@@ -88,24 +105,90 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td style="text-align: center;"><input id="approve" class="uk-checkbox" type="checkbox" style="width: 20px; height: 20px; margin-right: 15px;"></td>
-                            </tr>
-                            
-                           
+                            <?php                
+                                require_once "Connection.php";
+                                $sql = "SELECT 
+                                Orders.Approved, 
+                                Orders.OrderId, 
+                                Suppliers.Name as SupplierName, 
+                                Stock.Name as StockName, 
+                                Orders.Amount, 
+                                Orders.PurchaseDate, 
+                                Orders.DeliveryDate,
+                                Orders.ReceivedDate FROM `Orders`
+                                INNER JOIN `Supplierstock` ON Orders.SupplierStockId = Supplierstock.SupplierStockId
+                                INNER JOIN `Stock` ON Supplierstock.StockId = Stock.StockId
+                                INNER JOIN `Suppliers` ON Supplierstock.SupplierId = Suppliers.SupplierId";
+
+                                $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));;
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        ?>
+
+                                        <tr>
+                                            <td>
+                                            <?php 
+                                                if ($row["Approved"] == 0) { 
+                                                    echo "Unapproved";
+                                                } else {
+                                                    echo "Approved";
+                                                } 
+                                            ?>
+                                            </td>
+                                            <td><?php echo "$row[OrderId]"; 
+                                            echo "<input name='ID[]' type='hidden' value='$row[OrderId]'>"?></td>
+                                            <td><?php echo "$row[SupplierName]"; ?></td>
+                                            <td><?php echo "$row[StockName]"; ?></td>
+                                            <td><?php echo "$row[Amount]"; ?></td>
+                                            <td><?php echo "$row[PurchaseDate]"; ?></td>
+                                            <td><?php echo "$row[DeliveryDate]"; ?></td>
+                                            <td><?php echo "$row[ReceivedDate]"; ?></td>
+                                            <td style="text-align: center;">
+                                            <input name="Approved[]" type='hidden' value="0">
+                                            <input name="Approved[]" class="uk-checkbox" type="checkbox" 
+                                            style="width: 20px; height: 20px; margin-right: 15px;" onchange="updateBox(this, <?php echo "$row[OrderId]"; ?>)"
+                                            <?php 
+                                                if ($row["Approved"] == 1) { 
+                                                    echo 'value="1" checked';
+                                                } else {
+                                                    echo 'value="0"';
+                                                }
+                                            ?>>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                    }
+                                } else {
+                                    ?>
+
+                                    <tr>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td style="text-align: center;">
+                                        <input id="approve" class="uk-checkbox" type="checkbox" 
+                                        style="width: 20px; height: 20px; margin-right: 15px;"></td>
+                                    </tr>
+                                    <?php
+                                }
+
+                            ?>                                
                         </tbody>
                     </table>
-
-                    <!-- Show the  Approved  order table -->
-                    <table id="approvedTable" style="display: none;" class="uk-table uk-table-hover uk-table-divider">
+                    </form>
+                    
+<!-- Show the  Approved  order table -->
+                    <form id="updateApproved" method="POST" action="control.php" style="display: none;">
+                    <input type="hidden" name="role" value="<?php echo $job?>">
+                    <button name="ConfirmApproved" class="uk-button uk-button-primary" type="submit" 
+                    style="float: right;">Confirm Edit
+                    </button>
+                    <table id="approvedTable" class="uk-table uk-table-hover uk-table-divider">
                         <thead>
                             <tr>
                                 <th>OrderId</th>
@@ -119,21 +202,75 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td style="text-align: center;"><input id="approve" class="uk-checkbox" type="checkbox" style="width: 20px; height: 20px; margin-right: 33px;"></td>
-                            </tr>                           
+                            <?php
+                                $sql = "SELECT 
+                                Orders.Approved, 
+                                Orders.OrderId, 
+                                Suppliers.Name as SupplierName, 
+                                Stock.Name as StockName, 
+                                Orders.Amount, 
+                                Orders.PurchaseDate, 
+                                Orders.DeliveryDate,
+                                Orders.ReceivedDate FROM `Orders`
+                                INNER JOIN `Supplierstock` ON Orders.SupplierStockId = Supplierstock.SupplierStockId
+                                INNER JOIN `Stock` ON Supplierstock.StockId = Stock.StockId
+                                INNER JOIN `Suppliers` ON Supplierstock.SupplierId = Suppliers.SupplierId 
+                                WHERE Orders.Approved = 1";
+                                $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        ?>
+                                        
+                                        <tr>
+                                            <td><?php echo "$row[OrderId]"; 
+                                            echo "<input name='order[][id]' type='hidden' value='$row[OrderId]'>"?></td>
+                                            <td><?php echo "$row[SupplierName]"; ?></td>
+                                            <td><?php echo "$row[StockName]"; ?></td>
+                                            <td><?php echo "$row[Amount]"; ?></td>
+                                            <td><?php echo "$row[PurchaseDate]"; ?></td>
+                                            <td><?php echo "$row[DeliveryDate]"; ?></td>
+                                            <td><?php echo "$row[ReceivedDate]"; ?></td>
+                                            <td style="text-align: center;">
+                                            <input name="order[][approved]" class="uk-checkbox" type="checkbox" 
+                                            style="width: 20px; height: 20px; margin-right: 15px;" onchange="updateBox(this)"
+                                            <?php 
+                                                if ($row["Approved"] == 1) { 
+                                                    echo 'value="1" checked';
+                                                } else {
+                                                    echo 'value="0"';
+                                                }
+                                            ?>></td>
+                                        </tr>                             
+                                        <?php
+                                    }
+                                } else {
+                                    ?>
+
+                                    <tr>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td style="text-align: center;">
+                                        <input class="uk-checkbox" type="checkbox" 
+                                        style="width: 20px; height: 20px; margin-right: 33px;"></td>
+                                    </tr>
+                                    <?php
+                                }
+                            ?>                          
                         </tbody>
                     </table>
-
-                    <!-- Show the  Unapproved  order table -->
-                    <table id="unapprovedTable" style="display: none;" class="uk-table uk-table-hover uk-table-divider">
+                    </form>
+<!-- Show the  Unapproved  order table -->
+                    <form id="updateUnapproved" method="POST" action="control.php" style="display: none;">
+                    <input type="hidden" name="role" value="<?php echo $job?>">
+                    <button name="ConfirmUnapproved" class="uk-button uk-button-primary" type="submit" 
+                    style="float: right;">Confirm Edit
+                    </button>
+                    <table id="unapprovedTable" class="uk-table uk-table-hover uk-table-divider">
                         <thead>
                             <tr>
                                 <th>OrderId</th>
@@ -148,21 +285,73 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td style="text-align: center;"><input id="approve" class="uk-checkbox" type="checkbox" style="width: 20px; height: 20px; margin-right: 10px;"></td>
-                                <td><button class="uk-button uk-button-danger" type="button" style="font-size: 16px;">Delete</button></td>
-                            </tr>
-                            
-                           
+                            <?php
+                                $sql = "SELECT 
+                                Orders.Approved, 
+                                Orders.OrderId, 
+                                Suppliers.Name as SupplierName, 
+                                Stock.Name as StockName, 
+                                Orders.Amount, 
+                                Orders.PurchaseDate, 
+                                Orders.DeliveryDate,
+                                Orders.ReceivedDate FROM `Orders`
+                                INNER JOIN `Supplierstock` ON Orders.SupplierStockId = Supplierstock.SupplierStockId
+                                INNER JOIN `Stock` ON Supplierstock.StockId = Stock.StockId
+                                INNER JOIN `Suppliers` ON Supplierstock.SupplierId = Suppliers.SupplierId
+                                WHERE Orders.Approved = 0";
+
+                                $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        ?>
+                                        
+                                        <tr>
+                                            <td><?php echo "$row[OrderId]"; 
+                                            echo "<input name='order[][id]' type='hidden' value='$row[OrderId]'>"?></td>
+                                            <td><?php echo "$row[SupplierName]"; ?></td>
+                                            <td><?php echo "$row[StockName]"; ?></td>
+                                            <td><?php echo "$row[Amount]"; ?></td>
+                                            <td><?php echo "$row[PurchaseDate]"; ?></td>
+                                            <td><?php echo "$row[DeliveryDate]"; ?></td>
+                                            <td><?php echo "$row[ReceivedDate]"; ?></td>
+                                            <td style="text-align: center;">
+                                            <input name="order[][approved]" class="uk-checkbox" type="checkbox" 
+                                            style="width: 20px; height: 20px; margin-right: 10px;" onchange="updateBox(this)"
+                                            <?php 
+                                                if ($row["Approved"] == 1) { 
+                                                    echo 'value="1" checked';
+                                                } else {
+                                                    echo 'value="0"';
+                                                }
+                                            ?>></td>
+                                            <td><button class="uk-button uk-button-danger" type="button" 
+                                            style="font-size: 16px;">Delete</button></td>
+                                        </tr>                              
+                                        <?php
+                                    }
+                                } else {
+                                    ?>
+
+                                    <tr>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td><?php echo "No Record"; ?></td>
+                                        <td style="text-align: center;">
+                                        <input class="uk-checkbox" type="checkbox" 
+                                        style="width: 20px; height: 20px; margin-right: 10px;"></td>
+                                        <td><button class="uk-button uk-button-danger" type="button" 
+                                        style="font-size: 16px;">Delete</button></td>
+                                    </tr>
+                                    <?php
+                                }
+                            ?>                                            
                         </tbody>
                     </table>
+                    </form>
                             </div>
                     </div>
 
