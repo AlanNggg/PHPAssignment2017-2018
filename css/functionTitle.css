@@ -1,13 +1,12 @@
 /* This css is going to define the function name effect and image effect. */
 .fTitle1 {
-    position: fixed;
-    top: 52%;
-    left:28.5%;
      color: white;
      font-size: 20px;
      z-index: 0;
+     order: 1;
+     margin-top: 0px;
 }
-
+/*
 .fTitle2 {
     position: fixed;
     top: 52%;
@@ -24,6 +23,14 @@
      font-size: 20px;
 }
 
+.fTitle4 {
+    position: fixed;
+    top: 52%;
+    left: 50%;
+    color: white;
+    font-size: 20px;
+}
+
 .btImage1 {
     position: absolute;
     top: 47%;
@@ -32,13 +39,12 @@
     background-repeat: no-repeat;
     width: 70px;
     height: 70px;
-   
-
-    
-      
-
+    opacity: 1;
 }
 
+.image_button {
+    opacity: 1;
+}
 .btImage2 {
     position: absolute;
     top: 47%;
@@ -47,7 +53,6 @@
     background-repeat: no-repeat;
     width: 70px;
     height: 70px;
-
 }
 
 .btImage3 {
@@ -58,6 +63,11 @@
     background-repeat: no-repeat;
     width: 70px;
     height: 70px;
-
 }
+*/
 
+.btImage4 {
+    width: 70px; 
+    height: 70px; 
+    margin-top: 20px; 
+}
