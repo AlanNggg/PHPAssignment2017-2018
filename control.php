@@ -102,14 +102,29 @@
                 <h1>Nice to meet You!</h1>
             </div>
 
-            <?php
-                    $id = "restaurant";
-                    // check user from which department and get the suitable function,make website consistency.
-                    if($id == "restaurant")
-                        require("restaurant.php");
-                    else{
-                        require("manager.php");
+            <?php       
+                if (isset($_POST["ConfirmAll"], $_POST["ID"], $_POST["Approved"])) {
+
+                    require_once "Connection.php";
+                    extract ($_POST);
+                    for ($i = 0; $i < count($ID); $i++) {   
+                        echo"$ID[$i]";
+                        $sql = "UPDATE `Orders` SET Approved = $Approved[$i] WHERE OrderId = $ID[$i]";
+                        $result = mysqli_query($conn, $sql);
                     }
+                }
+
+                extract($_POST);
+                
+                $job = "";
+                // check user from which department and get the suitable function,make website consistency.
+                if ($role == "restaurants" || $job == "restaurants") { 
+                    $job = $role;
+                    require "restaurant.php";
+                } else if ($role == "managers" || $job == "restaurants") {       
+                    $job = $role;
+                    require "manager.php"; 
+                }
             ?>
     
 </body>
