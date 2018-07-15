@@ -16,12 +16,37 @@
 
     <link rel="stylesheet" href="css/circle.css">
     <link rel="stylesheet" href="css/functionTitle.css">
-    
+
+    <?php
+          $script= <<< JS
+            <script>
+                function updateDate(){
+                
+                    var name = document.getElementById("username").value;
+                    
+                    var desc = document.getElementById("restDesc").value;
+                    alert(name + desc);
+                
+                }
+
+            </script>
+JS;
+    echo $script;
+    ?>
 </head>
 <body>
     <?php
             require_once("Connection.php");
             extract($_REQUEST);
+
+            $id = 1;
+            $sql = "SELECT * FROM restaurants WHERE RestaurantId= $id ";
+            $result = mysqli_query($conn, $sql)
+                or die(mysqli_error($conn));
+            $re = mysqli_fetch_assoc($result);
+            $name = $re["Name"];
+            $desc = $re["Descriptions"];
+
     ?>
             <!-- set of function button -->
             <button class="circle1" href="#modal-container"uk-toggle>
@@ -67,16 +92,55 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td>Table Data</td>
-                                <td><button class="uk-button uk-button-danger" type="button">Delete</button></td>
-                            </tr>
+                        <?php
+                        
+                        $sql = "SELECT orders.OrderId,
+                                suppliers.Name AS SpName,
+                                stock.Name AS StName,
+                                orders.Amount,
+                                orders.PurchaseDate,
+                                orders.DeliveryDate,
+                                orders.ReceivedDate
+                                FROM orders,stock,suppliers,supplierStock
+                                WHERE orders.RestaurantId = $id
+                                && orders.SupplierStockId = supplierStock.SupplierStockId
+                                && supplierStock.SupplierId = suppliers.SupplierId
+                                && supplierStock.StockID = stock.StockID ";
+                                
+                        $result = mysqli_query($conn, $sql)
+                            or die(mysqli_error($conn));
+                    
+                      
+                    
+                        while($re = mysqli_fetch_assoc($result)){
+                            $orderID = $re["OrderId"];
+                            $spName = $re["SpName"];
+                            $stName = $re["StName"];
+                            $amount = $re["Amount"];
+                            $pd = $re["PurchaseDate"];
+                            $dd = $re["DeliveryDate"];
+                            $rd = $re["ReceivedDate"];
+                            
+                            $table = <<<HTML
+                                <tr>
+                                    <td>$orderID</td>
+                                    <td>$spName</td>
+                                    <td>$stName</td>
+                                    <td>$amount</td>
+                                    <td>$pd</td>
+                                    <td>$dd</td>
+                                    <td>$rd</td>
+                                    <td><button class="uk-button uk-button-danger" type="button">Delete</button></td>
+                                </tr>
+
+                        
+HTML;
+                        echo $table;
+                        }
+
+
+                    
+                    ?>
                             
                            
                         </tbody>
@@ -120,34 +184,60 @@
                                                 <input class="uk-input uk-form-width-medium" type="text" placeholder="100">
                                             </div>
                                        
-                                        
+                                            <div uk-overflow-auto>
 
                                             <table class="uk-table uk-table-hover uk-table-divider">
                                                 <thead>
                                                     <tr>
-                                                        <th>OrderId</th>
-                                                        <th>Supplier Name</th>
+                                                        <th>Stock ID</th>
                                                         <th>Stock Name</th>
-                                                        <th>Order Amount</th>
-                                                        <th>Purchase Date</th>
-                                                        <th>Delivery Date</th>
-                                                        <th>Received Date</th>
-                                                        <th></th>
+                                                        <th>Amount</th>
+                                                        <th>Select</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>Table Data</td>
-                                                        <td>Table Data</td>
-                                                        <td>Table Data</td>
-                                                        <td>Table Data</td>
-                                                        <td>Table Data</td>
-                                                        <td>Table Data</td>
-                                                        <td>Table Data</td>
-                                                        <td><button class="uk-button uk-button-danger" type="button">Delete</button></td>
-                                                    </tr>
+                                                 
+                                                <?php
+                        
+                                                        $sql = "SELECT supplierStock.StockID,
+                                                                stock.Name,
+                                                                supplierStock.Amount
+                                                                FROM stock,supplierStock
+                                                                WHERE supplierStock.StockID = stock.StockID";
+                                                                
+                                                        $result = mysqli_query($conn, $sql)
+                                                            or die(mysqli_error($conn));
+                                                    
+                                                      
+                                                    
+                                                        while($re = mysqli_fetch_assoc($result)){
+                                                            $stockID = $re["StockID"];
+                                                            $sname = $re["Name"];
+                                                            $amount =  $re["Amount"];
+                                                            
+                                                            $table = <<<HTML
+                                                                <tr>
+                                                                    <td>$stockID</td>
+                                                                    <td>$sname</td>
+                                                                    <td>$amount</td> 
+                                                                    <td>
+                                                                    <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                                                                    <label><input class="uk-radio" type="radio" name="radio2" ></label>
+                                                                    </div></td>
+                                                                </tr>
+
+                                                            
+HTML;
+                                                        echo $table;
+                                                        }
+
+
+                                                    
+                                                    ?>
+                                                    
                                                 </tbody>
                                             </table>
+                                                    </div>
                                         </form>
                                      </div>   
                              </div>
@@ -162,7 +252,6 @@
                    <button class="uk-modal-close-default" type="button" uk-close></button>
 
                    <h2 class="uk-modal-title">WareHouse</h2>
-                  
 
                    <!-- Show the  Item table -->
                    <table class="uk-table uk-table-hover uk-table-divider">
@@ -175,12 +264,31 @@
                            </tr>
                        </thead>
                        <tbody>
-                           <tr>
-                               <td>Table Data</td>
-                               <td>Table Data</td>
-                               <td>Table Data</td>
-                               
-                           </tr>
+
+                       <?php
+                        
+                            $sql = "SELECT stock.StockId,stock.Name,warehousestock.Amount FROM stock INNER JOIN warehousestock ON stock.Stockid = warehousestock.StockId ";
+                            $result = mysqli_query($conn, $sql)
+                                or die(mysqli_error($conn));
+                           
+                        
+                           
+                            while($re = mysqli_fetch_assoc($result)){
+                                 $name = $re["Name"];
+                                 $id = $re["StockId"];
+                                 $amount = $re["Amount"];
+                            echo "
+                                    <tr>
+                                        <td>$id</td>
+                                        <td>$name</td>
+                                        <td>$amount</td>
+                                     </tr>
+                                ";
+                            }
+                           
+                        ?>
+                        
+                           
                            
                           
                        </tbody>
@@ -196,18 +304,19 @@
 
               <h2 class="uk-modal-title">Restaurant Description</h2>
              
-              <form>
+              <form >
                     <fieldset class="uk-fieldset">
 
                         <div class="uk-margin">
                              Restaurant Name:
                              <?php
-                                $id = 1;
-                                $sql = "SELECT * FROM Restarurant WHERE id = `$id`";
-                                $result = mysqli_query($conn, $sql);
-                                    or die(mysqli_error($conn));
-                                $re = mysqli_fetch_assoc($rs);
-                                echo "<input class="uk-input" type="text" placeholder="Input"value="IQW">";
+                                    $input = <<< HTML
+
+                                <input id="username" name="username"class="uk-input" type="text" placeholder="Input"value="$name">
+
+HTML;
+
+                            echo $input;
                              ?>
                             
                         </div>
@@ -216,16 +325,16 @@
 
                         <div class="uk-margin">
                             Description:
-                            <textarea class="uk-textarea" rows="5" placeholder="Textarea"></textarea>
+                            <textarea id="restDesc" name="restDesc" class="uk-textarea" rows="5" placeholder="Textarea" autofocus> <?php echo $desc;?></textarea>
                         </div>
 
-                        <input class="uk-input uk-button uk-button-primary uk-width-1-2" type="submit" placeholder="Input">
+                        
 
                         
 
                     </fieldset>
                 </form>
-
+                <button class="uk-input uk-button uk-button-primary uk-width-1-2" type="button" onclick="updateDate()">Submit</button>
              
                </div>
             </div>
