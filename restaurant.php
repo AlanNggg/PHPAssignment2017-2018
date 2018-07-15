@@ -1,3 +1,13 @@
+
+<?php
+     require_once("Connection.php");
+     if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
+     extract($_REQUEST);
+
+     
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,8 +27,34 @@
     <link rel="stylesheet" href="css/circle.css">
     <link rel="stylesheet" href="css/functionTitle.css">
 
-    <?php
-          $script= <<< JS
+   <?php
+        if($_SERVER['REQUEST_METHOD'] == "GET"){
+            if(isset($_GET["act"])){
+                $rname = $_GET['rname'];
+                $rmid = $_GET['rmid'];
+                $sql = "UPDATE restaurants SET Name = `$rname` WHERE RestaurantId=$rmid";
+
+                if ($conn->query($sql) === TRUE) {
+                    $script = <<< JS
+                    <script>
+                    alert("Record updated successfully");
+                    </script>
+JS;
+                echo $script;
+                   
+                } else {
+                    echo "Error updating record: " . $conn->error;
+                }
+                    
+           
+              
+           }
+            
+        }
+   
+   
+   ?>
+      
             <script>
                 function updateDate(){
                 
@@ -26,26 +62,43 @@
                     
                     var desc = document.getElementById("restDesc").value;
                     alert(name + desc);
+
+                    if(name == "" || desc == ""){
+                        alert("Please Input the information");
+                        return;
+                    }else{
+
+                        <?php
+                               $id = 1;
+                                $sql = "UPDATE restaurants SET ='Doe' WHERE id = $id";
+                                if ($conn->query($sql) === TRUE) {
+                                    echo "Record updated successfully";
+                                } else {
+                                    echo "Error updating record: " . $conn->error;
+                                }
+                        ?>
+                    }
                 
                 }
 
             </script>
-JS;
-    echo $script;
-    ?>
+    
+
+
+   
 </head>
 <body>
     <?php
-            require_once("Connection.php");
-            extract($_REQUEST);
-
+            
+           
             $id = 1;
             $sql = "SELECT * FROM restaurants WHERE RestaurantId= $id ";
             $result = mysqli_query($conn, $sql)
                 or die(mysqli_error($conn));
             $re = mysqli_fetch_assoc($result);
-            $name = $re["Name"];
+            $rname = $re["Name"];
             $desc = $re["Descriptions"];
+            mysqli_free_result($result);
 
     ?>
             <!-- set of function button -->
@@ -111,7 +164,7 @@ JS;
                             or die(mysqli_error($conn));
                     
                       
-                    
+
                         while($re = mysqli_fetch_assoc($result)){
                             $orderID = $re["OrderId"];
                             $spName = $re["SpName"];
@@ -139,7 +192,7 @@ HTML;
                         }
 
 
-                    
+                     mysqli_free_result($result);
                     ?>
                             
                            
@@ -200,7 +253,7 @@ HTML;
                                                 <?php
                         
                                                         $sql = "SELECT supplierStock.StockID,
-                                                                stock.Name,
+                                                                stock.Name AS stName,
                                                                 supplierStock.Amount
                                                                 FROM stock,supplierStock
                                                                 WHERE supplierStock.StockID = stock.StockID";
@@ -212,7 +265,7 @@ HTML;
                                                     
                                                         while($re = mysqli_fetch_assoc($result)){
                                                             $stockID = $re["StockID"];
-                                                            $sname = $re["Name"];
+                                                            $sname = $re["stName"];
                                                             $amount =  $re["Amount"];
                                                             
                                                             $table = <<<HTML
@@ -232,7 +285,7 @@ HTML;
                                                         }
 
 
-                                                    
+                                                        mysqli_free_result($result);
                                                     ?>
                                                     
                                                 </tbody>
@@ -285,7 +338,7 @@ HTML;
                                      </tr>
                                 ";
                             }
-                           
+                            mysqli_free_result($result);
                         ?>
                         
                            
@@ -304,7 +357,7 @@ HTML;
 
               <h2 class="uk-modal-title">Restaurant Description</h2>
              
-              <form >
+              <form id="descForm" name="descForm"action="control.php?act=list">
                     <fieldset class="uk-fieldset">
 
                         <div class="uk-margin">
@@ -312,7 +365,7 @@ HTML;
                              <?php
                                     $input = <<< HTML
 
-                                <input id="username" name="username"class="uk-input" type="text" placeholder="Input"value="$name">
+                                <input id="username" name="username"class="uk-input" type="text" value="$rname">
 
 HTML;
 
@@ -325,16 +378,21 @@ HTML;
 
                         <div class="uk-margin">
                             Description:
-                            <textarea id="restDesc" name="restDesc" class="uk-textarea" rows="5" placeholder="Textarea" autofocus> <?php echo $desc;?></textarea>
+                            <textarea id="restDesc" name="restDesc" class="uk-textarea" rows="5" > <?php echo $desc;?></textarea>
                         </div>
 
                         
+                 <?php          
+                    $input = <<< HTML
+                            <input class="uk-input uk-button uk-button-primary uk-width-1-2" type="button" 
+                             onclick="location.href='restaurant.php?rmid=$id&act=desc&rname='+document.descForm.username.value + '&restDesc=' + document.descForm.restDesc.value" >
+HTML;
+                            echo $input;
+                    ?>
+                            </fieldset>
 
-                        
-
-                    </fieldset>
                 </form>
-                <button class="uk-input uk-button uk-button-primary uk-width-1-2" type="button" onclick="updateDate()">Submit</button>
+                
              
                </div>
             </div>
