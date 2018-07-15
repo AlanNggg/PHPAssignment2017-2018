@@ -23,10 +23,10 @@
             <button class="circle1" href="#modal-container"uk-toggle>
                 <img class="btImage4" src="UI/material/content_paste_white_108x108.png"/><h1 class="fTitle1">Order</h1></button>
 
-            <button class="circle2" href="#modal-container"uk-toggle>
+            <button class="circle2" href="#modal-WareHouse"uk-toggle>
                 <img class="btImage4" src="UI/material/home_white_108x108.png"/><h1 class="fTitle1">WareHouse</h1></button>  
 
-            <button class="circle3" href="#modal-container"uk-toggle>
+            <button class="circle3" href="#modal-Description"uk-toggle>
                 <img class="btImage4" src="UI/material/store_white_108x108.png"/><h1 class="fTitle1">Restaurant</h1></button>  
     
             <!-- function name -->
