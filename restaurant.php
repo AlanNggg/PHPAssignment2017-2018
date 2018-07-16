@@ -152,30 +152,80 @@
                         xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
                         //Send the attribute to the php
                         xmlhttp.send("id="+id);
-                    }
+        }
 
-        // function loadXMLDoc()
-        // {
-        // var xmlhttp;
-        // if (window.XMLHttpRequest)
-        // {// code for IE7+, Firefox, Chrome, Opera, Safari
-        // xmlhttp=new XMLHttpRequest();
-        // }
-        // else
-        // {// code for IE6, IE5
-        // xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        // }
-        // xmlhttp.onreadystatechange=function()
-        // {
-        // if (xmlhttp.readyState==4 && xmlhttp.status==200)
-        //     {
-        //     document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
-        //     }
-        // }
-        // xmlhttp.open("POST","/ajax/demo_post2.asp",true);
-        // xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-        // xmlhttp.send("fname=Bill&lname=Gates");
-        // }
+        function createOrder(){
+            alert("HI");
+            var id = document.getElementById("restId").getAttribute('data-value');
+                       
+                       var xmlhttp;    
+                      if (window.XMLHttpRequest)
+                      {
+                               xmlhttp=new XMLHttpRequest();
+                       }
+                           // code for IE6, IE5
+                       else
+                       {
+                               xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+                       }
+                       //if the xmlhttp is change the status 
+                       xmlhttp.onreadystatechange=function()
+                       {
+                           //Return the Connect Succese Message
+                           if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                               {
+                                   //set the html code to tetHint div box
+                                   document.getElementById("createOrderForm").innerHTML=xmlhttp.responseText;
+                               }
+                       }
+                       //Use method Post to send the data to php
+                       xmlhttp.open("POST","createOrder.php",true);
+                       //Use set RequsetHeader when use post
+                       xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                       //Send the attribute to the php
+                       xmlhttp.send("id="+id);
+        }
+        function checkData(){
+                var orderID = document.getElementById("fOrderID").value;
+                var restID = document.getElementById("fRestID").value;
+                var pDate = document.getElementById("fDate").value;
+                var stockID = document.querySelector('input[name="fItem"]:checked').value;
+                var amount = document.getElementById("fAmount").value;
+
+                if(orderID =="" || restID =="" || pDate =="" || amount==""){
+
+                    alert("Please input All information ");
+                    return;
+                }
+                var xmlhttp;    
+                       if (window.XMLHttpRequest)
+                       {
+                                xmlhttp=new XMLHttpRequest();
+                        }
+                            // code for IE6, IE5
+                        else
+                        {
+                                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+                        }
+                        //if the xmlhttp is change the status 
+                        xmlhttp.onreadystatechange=function()
+                        {
+                            //Return the Connect Succese Message
+                            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                                {
+                                    //set the html code to tetHint div box
+                                    document.getElementById("createTable-alert").innerHTML=xmlhttp.responseText;
+                                }
+                        }
+                        //Use method Post to send the data to php
+                        xmlhttp.open("POST","createOrderSQL.php",true);
+                        //Use set RequsetHeader when use post
+                        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                        //Send the attribute to the php
+                        xmlhttp.send("orderID="+orderID +"&restID="+restID +"&pDate="+pDate
+                                        +"&stockID="+stockID +"&amount="+amount );
+            }
+        
 </script>
     
 <style>
@@ -209,7 +259,7 @@
             <button class="circle2" href="#modal-WareHouse"uk-toggle>
                 <img class="btImage4" src="UI/material/home_white_108x108.png"/><h1 class="fTitle1">WareHouse</h1></button>  
 
-            <button class="circle3" href="#modal-Description"uk-toggle>
+            <button class="circle3"  href="#modal-Description"uk-toggle>
                 <img class="btImage4" src="UI/material/store_white_108x108.png"/><h1 class="fTitle1">Restaurant</h1></button>  
     
             <!-- function name -->
@@ -228,7 +278,7 @@
 
                     <h2 class="uk-modal-title">Order</h2>
 
-                    <a id="js-modal-prompt" class="uk-button uk-button-default" href="#modal-createOrder" uk-toggle>Create Order</a>
+                    <button id="js-modal-prompt" onClick="createOrder()" class="uk-button uk-button-default" href="#createTable" uk-toggle>Create Order</button>
                    
 
                     <!-- Show the  order table -->
@@ -246,20 +296,16 @@
                             </tr>
                         </thead>
 
-                        <tbody id="orderTable">
+                        <tbody id="orderTable"></tbody>
 
-                            <!-- <div id="orderTable" name="orderTable">
-
-                            </div> -->
-                           
-                        </tbody>
                     </table>
                  </div>
             </div>
 
                         <!-- Create Order Table -->
-                        <div id="modal-createOrder" class="uk-modal-full" uk-modal>
-                            <!-- use dialog way -->
+                        <div id="createTable" class="uk-modal-container" uk-modal>
+                            
+                    <!-- use dialog way -->
                             <div class="uk-modal-dialog">
 
                                 <!-- Close button to close the modal -->
@@ -267,90 +313,20 @@
 
                                 <!-- set grid and width about the modal uk-child-width-1-2 is mean it moke to class in half  -->
                                 
-
+                                
                                 <!-- The header text of modal -->
-                                    <div class="uk-modal-header">
+                                <div class="uk-modal-header">
                                         <h2 class="uk-modal-title">Create Order</h2>
-                                    </div>
+                                </div>
+                                <div id="createTable-alert"></div>
                                     <!-- Set the padding with all under element uk-padding is defualt padding in UIkit  -->
                                     <div class="uk-padding">
-                                        <form class="uk-grid-small" uk-grid>
 
-                                            <div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid>
-                                                    <div class="uk-width-1-2">
-                                                        Order ID:
-                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="100">
-                                                    </div>
-                                                    <div class="uk-width-1-2">
-                                                         Order ID:
-                                                        <input class="uk-input uk-form-width-medium" type="text" placeholder="100">
-                                                    </div>
+                                        <form id="createOrderForm"></form>
 
-                                             </div>
-
-                                            <div class="uk-width-1-1">
-                                                Order ID:
-                                                <input class="uk-input uk-form-width-medium" type="text" placeholder="100">
-                                            </div>
-                                       
-                                            <div uk-overflow-auto>
-
-                                            <table class="uk-table uk-table-hover uk-table-divider">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Stock ID</th>
-                                                        <th>Stock Name</th>
-                                                        <th>Amount</th>
-                                                        <th>Select</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                 
-                                                <?php
-                        
-                                                        $sql = "SELECT supplierStock.StockID,
-                                                                stock.Name AS stName,
-                                                                supplierStock.Amount
-                                                                FROM stock,supplierStock
-                                                                WHERE supplierStock.StockID = stock.StockID";
-                                                                
-                                                        $result = mysqli_query($conn, $sql)
-                                                            or die(mysqli_error($conn));
-                                                    
-                                                      
-                                                    
-                                                        while($re = mysqli_fetch_assoc($result)){
-                                                            $stockID = $re["StockID"];
-                                                            $sname = $re["stName"];
-                                                            $amount =  $re["Amount"];
-                                                            
-                                                            $table = <<<HTML
-                                                                <tr>
-                                                                    <td>$stockID</td>
-                                                                    <td>$sname</td>
-                                                                    <td>$amount</td> 
-                                                                    <td>
-                                                                    <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                                                                    <label><input class="uk-radio" type="radio" name="radio2" ></label>
-                                                                    </div></td>
-                                                                </tr>
-
-                                                            
-HTML;
-                                                        echo $table;
-                                                        }
-
-
-                                                        mysqli_free_result($result);
-                                                    ?>
-                                                    
-                                                </tbody>
-                                            </table>
-                                                    </div>
-                                        </form>
-                                     </div>   
+                                    </div>   
                              </div>
-                        </div>
+                         </div>
 
 
                 <!-- Function of wareHouse -->
