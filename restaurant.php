@@ -84,31 +84,98 @@
                         xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
                         //Send the attribute to the php
                         xmlhttp.send("id="+id + "&name="+name + "&desc=" + desc);
-                    });
-        });
 
-        function loadXMLDoc()
-        {
-        var xmlhttp;
-        if (window.XMLHttpRequest)
-        {// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp=new XMLHttpRequest();
+                });
+          
+        });
+        function deleteOrder(data){
+                        var xmlhttp;    
+                       // code for IE7+, Firefox, Chrome, Opera, Safari
+                            if (window.XMLHttpRequest)
+                            {
+                                xmlhttp=new XMLHttpRequest();
+                            }
+                            // code for IE6, IE5
+                            else
+                            {
+                                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+                            }
+                        //if the xmlhttp is change the status 
+                        xmlhttp.onreadystatechange=function()
+                        {
+                            //Return the Connect Succese Message
+                            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                                {
+                                    document.getElementById("alertBox").innerHTML=xmlhttp.responseText;
+                                    //set the html code to tetHint div box
+                                    //alert("Delete Succerss");
+                                }
+                        }
+                        //Use method Post to send the data to php
+                        xmlhttp.open("POST","deleteOrder.php",true);
+                        //Use set RequsetHeader when use post
+                        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                        //Send the attribute to the php
+                        xmlhttp.send("id="+data);
+
+                        orderTable();
+                    
         }
-        else
-        {// code for IE6, IE5
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange=function()
-        {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-            document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
-            }
-        }
-        xmlhttp.open("POST","/ajax/demo_post2.asp",true);
-        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-        xmlhttp.send("fname=Bill&lname=Gates");
-        }
+
+        function orderTable(){
+                        
+                        var id = document.getElementById("restId").getAttribute('data-value');
+                       
+                        var xmlhttp;    
+                       if (window.XMLHttpRequest)
+                       {
+                                xmlhttp=new XMLHttpRequest();
+                        }
+                            // code for IE6, IE5
+                        else
+                        {
+                                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+                        }
+                        //if the xmlhttp is change the status 
+                        xmlhttp.onreadystatechange=function()
+                        {
+                            //Return the Connect Succese Message
+                            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                                {
+                                    //set the html code to tetHint div box
+                                    document.getElementById("orderTable").innerHTML=xmlhttp.responseText;
+                                }
+                        }
+                        //Use method Post to send the data to php
+                        xmlhttp.open("POST","reTable.php",true);
+                        //Use set RequsetHeader when use post
+                        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                        //Send the attribute to the php
+                        xmlhttp.send("id="+id);
+                    }
+
+        // function loadXMLDoc()
+        // {
+        // var xmlhttp;
+        // if (window.XMLHttpRequest)
+        // {// code for IE7+, Firefox, Chrome, Opera, Safari
+        // xmlhttp=new XMLHttpRequest();
+        // }
+        // else
+        // {// code for IE6, IE5
+        // xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        // }
+        // xmlhttp.onreadystatechange=function()
+        // {
+        // if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        //     {
+        //     document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+        //     }
+        // }
+        // xmlhttp.open("POST","/ajax/demo_post2.asp",true);
+        // xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        // xmlhttp.send("fname=Bill&lname=Gates");
+        // }
 </script>
     
 <style>
@@ -136,7 +203,7 @@
     ?>
             
             <!-- set of function button -->
-            <button class="circle1" href="#modal-container"uk-toggle>
+            <button id="order"class="circle1" onclick="orderTable()" href="#modal-container"uk-toggle >
                 <img class="btImage4" src="UI/material/content_paste_white_108x108.png"/><h1 class="fTitle1">Order</h1></button>
 
             <button class="circle2" href="#modal-WareHouse"uk-toggle>
@@ -152,9 +219,9 @@
 
             
 
-            <!-- Order function when user click the order button  -->
+            <!-- Order function -->
            <div id="modal-container" class="uk-modal-container" uk-modal>
-               
+               <div id="alertBox"></div>
                 <div class="uk-modal-dialog uk-modal-body">
 
                     <button class="uk-modal-close-default" type="button" uk-close></button>
@@ -178,57 +245,12 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>
-                        <?php
-                        
-                        $sql = "SELECT orders.OrderId,
-                                suppliers.Name AS SpName,
-                                stock.Name AS StName,
-                                orders.Amount,
-                                orders.PurchaseDate,
-                                orders.DeliveryDate,
-                                orders.ReceivedDate
-                                FROM orders,stock,suppliers,supplierStock
-                                WHERE orders.RestaurantId = $id
-                                && orders.SupplierStockId = supplierStock.SupplierStockId
-                                && supplierStock.SupplierId = suppliers.SupplierId
-                                && supplierStock.StockID = stock.StockID ";
-                                
-                        $result = mysqli_query($conn, $sql)
-                            or die(mysqli_error($conn));
-                    
-                      
 
-                        while($re = mysqli_fetch_assoc($result)){
-                            $orderID = $re["OrderId"];
-                            $spName = $re["SpName"];
-                            $stName = $re["StName"];
-                            $amount = $re["Amount"];
-                            $pd = $re["PurchaseDate"];
-                            $dd = $re["DeliveryDate"];
-                            $rd = $re["ReceivedDate"];
-                            
-                            $table = <<<HTML
-                                <tr>
-                                    <td>$orderID</td>
-                                    <td>$spName</td>
-                                    <td>$stName</td>
-                                    <td>$amount</td>
-                                    <td>$pd</td>
-                                    <td>$dd</td>
-                                    <td>$rd</td>
-                                    <td><button class="uk-button uk-button-danger" type="button">Delete</button></td>
-                                </tr>
+                        <tbody id="orderTable">
 
-                        
-HTML;
-                        echo $table;
-                        }
+                            <!-- <div id="orderTable" name="orderTable">
 
-
-                     mysqli_free_result($result);
-                    ?>
-                            
+                            </div> -->
                            
                         </tbody>
                     </table>
@@ -383,8 +405,9 @@ HTML;
                     </div>
                  </div>
 
-                 <div id="modal-Description" uk-modal>
-               
+             <!-- Restaurant Description-->
+            <div id="modal-Description" uk-modal>
+                <div id="txtHint" class="green"></div>
                <div class="uk-modal-dialog uk-modal-body">
 
               <button class="uk-modal-close-default" type="button" uk-close></button>
