@@ -125,7 +125,7 @@
         function orderTable(){
                         
                         var id = document.getElementById("restId").getAttribute('data-value');
-                       
+                        var role = document.getElementById("role").value;
                         var xmlhttp;    
                        if (window.XMLHttpRequest)
                        {
@@ -151,7 +151,7 @@
                         //Use set RequsetHeader when use post
                         xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
                         //Send the attribute to the php
-                        xmlhttp.send("id="+id);
+                        xmlhttp.send("id="+id+"&role="+role);
         }
 
         function createOrder(){
@@ -242,13 +242,9 @@
 </head>
 <body>
     <?php
-            
-           
-            $id = 1;
-            
-            
 
-            echo "<div id=\"restId\" name=\"restId\" data-value='$id'></div>";
+            echo "<div id=\"restId\" name=\"restId\" data-value='$username'></div>";
+            echo "<input id=\"role\" type=\"hidden\" value='$role'>";
 
     ?>
             
