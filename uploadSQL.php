@@ -1,27 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-
-      <!-- UIkit CSS -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/css/uikit.min.css" />
-
-        <!-- UIkit JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit-icons.min.js"></script>
-</head>
-<body>
-    
-</body>
-</html>
 <?php
            
          require_once("Connection.php");
          extract($_POST); 
-         //echo $name;
+         if ($role == "restaurants") {
+            echo $name;
                         
          $sql = "UPDATE restaurants
                  SET Name = '$name'
@@ -50,12 +32,29 @@ HTML;
                      </div>
 HTML;
              echo $input;
-                   
                  }
 
                  mysqli_close($conn);
+                 
+         } else if ($role == "managers") {
+             $sql = "UPDATE `Orders`
+                    SET Approved = '$approved',
+                        ManagerId = '$id'
+                    WHERE Orders.OrderId = '$orderId'";
+            $result = mysqli_query($conn, $sql);
+
+            if (!mysqli_query($conn, $sql)) {
+                echo "Error updating record: " . mysqli_error($conn);
+            } else {
+                $input = <<< HTML
+                    <div class="uk-alert-success" uk-alert>
+                    <a class="uk-alert-close" uk-close></a>
+                    <p>Update Success.</p>
+                     </div>
+HTML;
+             echo $input;
+            }
+         }
+         
 
 ?>
-
-</body>
-</html>
