@@ -22,69 +22,105 @@
     <!-- UIkit JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.8/js/uikit-icons.min.js"></script>
-
+    <script src="js/modifyDesc.js"></script>
+    <script src="js/jquery-3.3.1.js"></script>
 
     <link rel="stylesheet" href="css/circle.css">
     <link rel="stylesheet" href="css/functionTitle.css">
 
-   <?php
-        if($_SERVER['REQUEST_METHOD'] == "GET"){
-            if(isset($_GET["act"])){
-                $rname = $_GET['rname'];
-                $rmid = $_GET['rmid'];
-                $sql = "UPDATE restaurants SET Name = `$rname` WHERE RestaurantId=$rmid";
+   <script type="text/javascript">
+        $(document).ready(function(){
+                     // if Description button click 
+                $("#submitDesc").click(function(){
+                        
+                        // $.post("sendPwd.php",{QQnum:$("#QQnum").val(),psw:$("#psw").val()},function(data){
+                        // $("#aaa").html(data);
+                        // },"html");
 
-                if ($conn->query($sql) === TRUE) {
-                    $script = <<< JS
-                    <script>
-                    alert("Record updated successfully");
-                    </script>
-JS;
-                echo $script;
-                   
-                } else {
-                    echo "Error updating record: " . $conn->error;
-                }
-                    
-           
-              
-           }
-            
-        }
-   
-   
-   ?>
-      
-            <script>
-                function updateDate(){
-                
-                    var name = document.getElementById("username").value;
-                    
-                    var desc = document.getElementById("restDesc").value;
-                    alert(name + desc);
+                        // Set all hint text is null text first 
+                        document.getElementById("txtHintName").innerHTML="";
+                        document.getElementById("txtHintDesc").innerHTML="";
+                        document.getElementById("txtHint").innerHTML="";
 
-                    if(name == "" || desc == ""){
-                        alert("Please Input the information");
-                        return;
-                    }else{
-
-                        <?php
-                               $id = 1;
-                                $sql = "UPDATE restaurants SET ='Doe' WHERE id = $id";
-                                if ($conn->query($sql) === TRUE) {
-                                    echo "Record updated successfully";
-                                } else {
-                                    echo "Error updating record: " . $conn->error;
+                        //Get the value form form attribute
+                        var id = document.getElementById("restId").getAttribute('data-value');
+                        var name = document.getElementById("username").value;
+                        var desc = document.getElementById("restDesc").value;
+                        
+                        var xmlhttp;    
+                        //if name is no input
+                        if (name=="")
+                        {
+                            document.getElementById("txtHintName").innerHTML="Please Input the Restaurant Name";
+                            return;
+                        //if Description is no input
+                        }else if(desc==""){
+                            document.getElementById("txtHintDesc").innerHTML="Please Input the Restaurant Description";
+                            return;
+                        }
+                            // code for IE7+, Firefox, Chrome, Opera, Safari
+                            if (window.XMLHttpRequest)
+                            {
+                                xmlhttp=new XMLHttpRequest();
+                            }
+                            // code for IE6, IE5
+                            else
+                            {
+                                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+                            }
+                        //if the xmlhttp is change the status 
+                        xmlhttp.onreadystatechange=function()
+                        {
+                            //Return the Connect Succese Message
+                            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                                {
+                                    //set the html code to tetHint div box
+                                    document.getElementById("txtHint").innerHTML=xmlhttp.responseText;
                                 }
-                        ?>
-                    }
-                
-                }
+                        }
+                        //Use method Post to send the data to php
+                        xmlhttp.open("POST","uploadSQL.php",true);
+                        //Use set RequsetHeader when use post
+                        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                        //Send the attribute to the php
+                        xmlhttp.send("id="+id + "&name="+name + "&desc=" + desc);
+                    });
+        });
 
-            </script>
+        function loadXMLDoc()
+        {
+        var xmlhttp;
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+            document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+            }
+        }
+        xmlhttp.open("POST","/ajax/demo_post2.asp",true);
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlhttp.send("fname=Bill&lname=Gates");
+        }
+</script>
     
-
-
+<style>
+    div.red
+    {   
+        color: red;
+    }
+    div.green
+    {   
+        color: green;
+    }
+</style>
    
 </head>
 <body>
@@ -92,15 +128,13 @@ JS;
             
            
             $id = 1;
-            $sql = "SELECT * FROM restaurants WHERE RestaurantId= $id ";
-            $result = mysqli_query($conn, $sql)
-                or die(mysqli_error($conn));
-            $re = mysqli_fetch_assoc($result);
-            $rname = $re["Name"];
-            $desc = $re["Descriptions"];
-            mysqli_free_result($result);
+            
+            
+
+            echo "<div id=\"restId\" name=\"restId\" data-value='$id'></div>";
 
     ?>
+            
             <!-- set of function button -->
             <button class="circle1" href="#modal-container"uk-toggle>
                 <img class="btImage4" src="UI/material/content_paste_white_108x108.png"/><h1 class="fTitle1">Order</h1></button>
@@ -362,37 +396,46 @@ HTML;
 
                         <div class="uk-margin">
                              Restaurant Name:
-                             <?php
-                                    $input = <<< HTML
+                    <?php
+                     require_once("Connection.php");
+                    $id = 1;
+                    $sql = "SELECT * FROM restaurants WHERE RestaurantId= $id ";
+                    $result = mysqli_query($conn, $sql)
+                        or die(mysqli_error($conn));
+                    $re = mysqli_fetch_assoc($result);
+                    $rname = $re["Name"];
+                    $desc = $re["Descriptions"];
+                           $input = <<<HTM
 
                                 <input id="username" name="username"class="uk-input" type="text" value="$rname">
 
-HTML;
 
-                            echo $input;
-                             ?>
-                            
+
+                           
+                            <div id="txtHintName" class="red"></div>
                         </div>
-
+                        
+                        
                         
 
                         <div class="uk-margin">
                             Description:
-                            <textarea id="restDesc" name="restDesc" class="uk-textarea" rows="5" > <?php echo $desc;?></textarea>
+                            <textarea id="restDesc" name="restDesc" class="uk-textarea" rows="5" >$desc</textarea>
+                            <div id="txtHintDesc" class="red"></div>
                         </div>
-
                         
-                 <?php          
-                    $input = <<< HTML
-                            <input class="uk-input uk-button uk-button-primary uk-width-1-2" type="button" 
-                             onclick="location.href='restaurant.php?rmid=$id&act=desc&rname='+document.descForm.username.value + '&restDesc=' + document.descForm.restDesc.value" >
-HTML;
+                        
+                        
+                    
+                            <input id="submitDesc" name="submitDesc" class="uk-input uk-button uk-button-primary uk-width-1-2" type="button" value="Submit"/>
+HTM;
                             echo $input;
                     ?>
+                    
                             </fieldset>
 
                 </form>
-                
+                <div id="txtHint" class="green"></div>
              
                </div>
             </div>
